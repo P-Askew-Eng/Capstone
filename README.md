@@ -1,2 +1,2 @@
 # Capstone
-Repository for 
+Repository for JHU Data Science Capstone Project
