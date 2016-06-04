@@ -1,0 +1,58 @@
+---
+title: "Capstone Interim Report"
+author: "Paul Askew"
+date: "29 May 2016"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(NLP)
+library(tm)
+library(dplyr)
+library(data.table)
+```
+
+## JHU Data Science Capstone Interim Report
+
+The data files have already been downloaded and the en_US options are being used for this project. The first step is to get an idea of the scale of the data so the files are summarised in thetablebelwowhich gives the size, number of lines and the number of characters in the longest line of each file:
+
+```{r file summary,echo=FALSE, warning=FALSE}
+
+blogs <- readLines("data/en_US.blogs.txt")
+news <- readLines("data/en_US.news.txt")
+twitter <- readLines("data/en_US.twitter.txt")
+
+require(data.table)
+datasets <- c("blogs", "news", "twitter")
+objSize <- sapply(datasets, function(x) {format(object.size(get(x)), units = "Mb")})
+lines <- sapply(datasets, function(x) {length(get(x))})
+chars <- c(max(nchar(blogs)),max(nchar(news)),max(nchar(twitter)))#sapply did not work correctly for this
+overview <- data.table("Dataset" = datasets, "Object Size (Mb)" = objSize, "Lines" = lines,"Longest Line"=chars)
+overview
+
+```
+## Data Cleaning
+
+The data needs to be cleaned to remove things such as profanities, non text characters etc.
+
+```{r}
+
+```
+
+
+
+## N-grams
+
+N-grams are the 
+
+```{r pressure, echo=FALSE}
+
+```
+
+## SHiny App
+
+The objective of this project is to create a Shiny App that will predict the next word based on the previously input word.  The captured n grams willbe the basis of this and 
+
+References
+[1] http://onepager.togaware.com/TextMiningO.pdf 
