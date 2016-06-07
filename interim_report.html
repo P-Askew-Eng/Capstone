@@ -118,7 +118,7 @@ $(document).ready(function () {
 
 <div id="jhu-data-science-capstone-interim-report" class="section level2">
 <h2>JHU Data Science Capstone Interim Report</h2>
-<p>The data files have already been downloaded and the en_US options are being used for this project. The first step is to get an idea of the scale of the data so the files are summarised in thetablebelwowhich gives the size, number of lines and the number of characters in the longest line of each file:</p>
+<p>The data files have already been downloaded from <a href="https://d396qusza40orc.cloudfront.net/dsscapstone/dataset/Coursera-SwiftKey.zip" class="uri">https://d396qusza40orc.cloudfront.net/dsscapstone/dataset/Coursera-SwiftKey.zip</a> and the en_US options are being used for this project. The first step is to get an idea of the scale of the data so the files are summarised in the table below which gives the size, number of lines and the number of characters in the longest line of each file:</p>
 <pre><code>##    Dataset Object Size (Mb)   Lines Longest Line
 ## 1:   blogs         248.5 Mb  899288        40835
 ## 2:    news          19.2 Mb   77259         5760
@@ -126,16 +126,23 @@ $(document).ready(function () {
 </div>
 <div id="data-cleaning" class="section level2">
 <h2>Data Cleaning</h2>
-<p>The data needs to be cleaned to remove things such as profanities, non text characters etc.</p>
+<p>The data needs to be cleaned to remove things such as profanities, non text characters etc. This is achieved using the tm package commonly used to support text mining [1]. We start by loading these in as a corpus of documents then the following transformations are implemented:</p>
+<ol style="list-style-type: decimal">
+<li>Switch to lower case</li>
+<li>Remove profanities [2]</li>
+<li>Remove numbers</li>
+<li>Remove punctuation</li>
+</ol>
+<p>This takes quite some time!</p>
 </div>
 <div id="n-grams" class="section level2">
 <h2>N-grams</h2>
 <p>N-grams are the</p>
 </div>
 <div id="shiny-app" class="section level2">
-<h2>SHiny App</h2>
-<p>The objective of this project is to create a Shiny App that will</p>
-<p>References [1] <a href="http://onepager.togaware.com/TextMiningO.pdf" class="uri">http://onepager.togaware.com/TextMiningO.pdf</a></p>
+<h2>Shiny App</h2>
+<p>The objective of this project is to create a Shiny App that will predict the next word based on the previously input word. The captured n grams will be the basis of this and I will look to</p>
+<p>References [1] <a href="http://onepager.togaware.com/TextMiningO.pdf" class="uri">http://onepager.togaware.com/TextMiningO.pdf</a> [2] <a href="http://www.bannedwordlist.com/lists/swearWords.txt" class="uri">http://www.bannedwordlist.com/lists/swearWords.txt</a></p>
 </div>
 
 

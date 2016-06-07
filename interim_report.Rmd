@@ -15,13 +15,13 @@ library(data.table)
 
 ## JHU Data Science Capstone Interim Report
 
-The data files have already been downloaded and the en_US options are being used for this project. The first step is to get an idea of the scale of the data so the files are summarised in thetablebelwowhich gives the size, number of lines and the number of characters in the longest line of each file:
+The data files have already been downloaded from https://d396qusza40orc.cloudfront.net/dsscapstone/dataset/Coursera-SwiftKey.zip and the en_US options are being used for this project. The first step is to get an idea of the scale of the data so the files are summarised in the table below which gives the size, number of lines and the number of characters in the longest line of each file:
 
 ```{r file summary,echo=FALSE, warning=FALSE}
 
-blogs <- readLines("data/en_US.blogs.txt")
-news <- readLines("data/en_US.news.txt")
-twitter <- readLines("data/en_US.twitter.txt")
+blogs <- readLines("data/en_US.blogs.txt",skipNul = TRUE)
+news <- readLines("data/en_US.news.txt",skipNul = TRUE)
+twitter <- readLines("data/en_US.twitter.txt",skipNul = TRUE)
 
 require(data.table)
 datasets <- c("blogs", "news", "twitter")
@@ -34,10 +34,27 @@ overview
 ```
 ## Data Cleaning
 
-The data needs to be cleaned to remove things such as profanities, non text characters etc.
+The data needs to be cleaned to remove things such as profanities, non text characters etc.  This is achieved using the tm package commonly used to support text mining [1].  We start by loading these in as a corpus of documents then the following transformations are implemented:
 
-```{r}
+1. Switch to lower case
+2. Remove profanities [2]
+3. Remove numbers
+4. Remove punctuation
 
+
+This takes quite some time!
+
+```{r cleaning}
+
+#if (!file.exists("./data/swearWords,txt")) {
+#(download.file("http://www.bannedwordlist.com/lists/swearWords.txt", destfile="./data/swearWords.txt"))}
+docs<-Corpus(DirSource("./data"))
+docs <- tm_map(docs, content_transformer(tolower))
+#profanity<-readLines(./data/swearWords.txt)
+#docs <- tm_map(docs, removeWords, swearWords)
+docs <- tm_map(docs, removeNumbers)
+docs <- tm_map(docs, removePunctuation)
+docs <- tm_map(docs, stripWhitespace)
 ```
 
 
@@ -50,9 +67,10 @@ N-grams are the
 
 ```
 
-## SHiny App
+## Shiny App
 
-The objective of this project is to create a Shiny App that will predict the next word based on the previously input word.  The captured n grams willbe the basis of this and 
+The objective of this project is to create a Shiny App that will predict the next word based on the previously input word.  The captured n grams will be the basis of this and I will look to 
 
 References
-[1] http://onepager.togaware.com/TextMiningO.pdf 
+[1] http://onepager.togaware.com/TextMiningO.pdf
+[2] http://www.bannedwordlist.com/lists/swearWords.txt
