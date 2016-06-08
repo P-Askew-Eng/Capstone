@@ -44,14 +44,14 @@ The data needs to be cleaned to remove things such as profanities, non text char
 
 This takes quite some time!
 
-```{r cleaning}
+```{r cleaning echo=FALSE}
 
-#if (!file.exists("./data/swearWords,txt")) {
-#(download.file("http://www.bannedwordlist.com/lists/swearWords.txt", destfile="./data/swearWords.txt"))}
 docs<-Corpus(DirSource("./data"))
 docs <- tm_map(docs, content_transformer(tolower))
-#profanity<-readLines(./data/swearWords.txt)
-#docs <- tm_map(docs, removeWords, swearWords)
+setInternet2(TRUE)
+profanity_url <- "http://www.bannedwordlist.com/lists/swearWords.txt"
+profanity <- scan(profanity_url, "")
+docs <- tm_map(docs, removeWords, profanity)
 docs <- tm_map(docs, removeNumbers)
 docs <- tm_map(docs, removePunctuation)
 docs <- tm_map(docs, stripWhitespace)
@@ -61,10 +61,36 @@ docs <- tm_map(docs, stripWhitespace)
 
 ## N-grams
 
-N-grams are the 
+N-grams are the basis for language prediction algorithms being groups of commonly found words. A quick analysis of the corpus reveals the key words below in terms of most common words (unigrams), pairs fo words (bigrams) and groups fo three words (trigrams). Analysis could go further but it is felt at this stage that this is of limited benefit as it is likely that groups of 
 
-```{r pressure, echo=FALSE}
+```{r ngrams, echo=FALSE}
+library(RWeka) # for generating N-grams
 
+unigram_token <- function(x)
+  NGramTokenizer(x, Weka_control(min = 1, max = 1))
+bigram_token <- function(x)
+  NGramTokenizer(x, Weka_control(min = 2, max = 2))
+trigram_token <- function(x)
+  NGramTokenizer(x, Weka_control(min = 3, max = 3))
+fourgram_token <- function(x)
+  NGramTokenizer(x, Weka_control(min = 4, max = 4))
+fivegram_token <- function(x)
+  NGramTokenizer(x, Weka_control(min = 5, max = 5))
+
+unigram <- TermDocumentMatrix(docs, control=list(tokenize=unigram_token))
+unigram_table <- findFreqTerms(unigram, lowfreq = 3)
+unigram_table <- sort(rowSums(as.matrix(unigram[unigram_table,])), decreasing = TRUE)
+unigram_table <- data.frame(unigram=names(unigram_table), frequency=unigram_table)
+
+bigram <- TermDocumentMatrix(docs, control=list(tokenize=bigram_token))
+bigram_table <- findFreqTerms(bigram, lowfreq = 3)
+bigram_table <- sort(rowSums(as.matrix(bigram[bigram_table,])), decreasing = TRUE)
+bigram_table <- data.frame(bigram=names(bigram_table), frequency=bigram_table)
+
+trigram <- TermDocumentMatrix(docs, control=list(tokenize=trigram_token))
+trigram_table <- findFreqTerms(trigram, lowfreq = 30)
+trigram_table <- sort(rowSums(as.matrix(trigram[trigram_table,])), decreasing = TRUE)
+trigram_table <- data.frame(trigram=names(trigram_table), frequency=trigram_table)
 ```
 
 ## Shiny App
@@ -72,5 +98,7 @@ N-grams are the
 The objective of this project is to create a Shiny App that will predict the next word based on the previously input word.  The captured n grams will be the basis of this and I will look to 
 
 References
+
 [1] http://onepager.togaware.com/TextMiningO.pdf
+
 [2] http://www.bannedwordlist.com/lists/swearWords.txt
